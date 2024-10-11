@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: user
+  datasource:
+    url: jdbc:postgresql://localhost:5432/rbpo
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
