@@ -2,7 +2,7 @@ spring:
   application:
     name: demo
   datasource:
-    url: jdbc:postgresql://localhost:5432/
+    url: jdbc:postgresql://localhost:5432/antivirus
     username: ${JDBC_USER}
     password: ${JDBC_PASSWORD}
   jpa:
