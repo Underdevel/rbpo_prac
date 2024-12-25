@@ -6,13 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import ru.mtuci.rbpo_2024_praktika.model.License;
 import ru.mtuci.rbpo_2024_praktika.model.User;
-import ru.mtuci.rbpo_2024_praktika.model.UserDetailsImpl;
 import ru.mtuci.rbpo_2024_praktika.service.LicenseService;
 import ru.mtuci.rbpo_2024_praktika.service.UserService;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
