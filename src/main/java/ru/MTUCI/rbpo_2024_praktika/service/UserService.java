@@ -4,7 +4,6 @@ import ru.mtuci.rbpo_2024_praktika.model.ApplicationRole;
 import ru.mtuci.rbpo_2024_praktika.model.User;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public interface UserService {
     User registerUser(String login, String password, String email, ApplicationRole role);

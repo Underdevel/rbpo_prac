@@ -1,21 +1,15 @@
 package ru.mtuci.rbpo_2024_praktika.service.impl;
 
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.mtuci.rbpo_2024_praktika.model.ApplicationRole;
-import ru.mtuci.rbpo_2024_praktika.model.Device;
 import ru.mtuci.rbpo_2024_praktika.model.User;
 import ru.mtuci.rbpo_2024_praktika.repository.DeviceRepository;
 import ru.mtuci.rbpo_2024_praktika.repository.UserRepository;
 import ru.mtuci.rbpo_2024_praktika.service.UserService;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
