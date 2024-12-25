@@ -1,4 +1,4 @@
-package ru.mtuci.rbpo_2024_praktika.configuration;
+package ru.MTUCI.rbpo_2024_praktika.configuration;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

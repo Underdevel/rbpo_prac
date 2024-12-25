@@ -1,4 +1,4 @@
-package ru.mtuci.rbpo_2024_praktika.model;
+package ru.MTUCI.rbpo_2024_praktika.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

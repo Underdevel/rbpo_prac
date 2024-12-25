@@ -1,4 +1,4 @@
-package ru.mtuci.rbpo_2024_praktika.controller;
+package ru.MTUCI.rbpo_2024_praktika.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -7,10 +7,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import ru.mtuci.rbpo_2024_praktika.model.License;
-import ru.mtuci.rbpo_2024_praktika.model.User;
-import ru.mtuci.rbpo_2024_praktika.service.LicenseService;
-import ru.mtuci.rbpo_2024_praktika.service.UserService;
+import ru.MTUCI.rbpo_2024_praktika.model.License;
+import ru.MTUCI.rbpo_2024_praktika.model.User;
+import ru.MTUCI.rbpo_2024_praktika.service.LicenseService;
+import ru.MTUCI.rbpo_2024_praktika.service.UserService;
 
 import java.util.Map;
 

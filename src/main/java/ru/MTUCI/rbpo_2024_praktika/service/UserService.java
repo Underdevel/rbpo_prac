@@ -1,7 +1,7 @@
-package ru.mtuci.rbpo_2024_praktika.service;
+package ru.MTUCI.rbpo_2024_praktika.service;
 
-import ru.mtuci.rbpo_2024_praktika.model.ApplicationRole;
-import ru.mtuci.rbpo_2024_praktika.model.User;
+import ru.MTUCI.rbpo_2024_praktika.model.ApplicationRole;
+import ru.MTUCI.rbpo_2024_praktika.model.User;
 
 import java.util.Optional;
 

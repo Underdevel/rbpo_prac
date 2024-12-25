@@ -1,4 +1,4 @@
-package ru.mtuci.rbpo_2024_praktika.model;
+package ru.MTUCI.rbpo_2024_praktika.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;

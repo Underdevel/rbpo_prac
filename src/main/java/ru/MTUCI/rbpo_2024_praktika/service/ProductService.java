@@ -1,6 +1,6 @@
-package ru.mtuci.rbpo_2024_praktika.service;
+package ru.MTUCI.rbpo_2024_praktika.service;
 
-import ru.mtuci.rbpo_2024_praktika.model.Product;
+import ru.MTUCI.rbpo_2024_praktika.model.Product;
 
 import java.util.List;
 import java.util.Optional;

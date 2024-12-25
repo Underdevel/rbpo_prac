@@ -1,10 +1,10 @@
-package ru.mtuci.rbpo_2024_praktika.service.impl;
+package ru.MTUCI.rbpo_2024_praktika.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.mtuci.rbpo_2024_praktika.model.DeviceLicense;
-import ru.mtuci.rbpo_2024_praktika.repository.DeviceLicenseRepository;
-import ru.mtuci.rbpo_2024_praktika.service.DeviceLicenseService;
+import ru.MTUCI.rbpo_2024_praktika.model.DeviceLicense;
+import ru.MTUCI.rbpo_2024_praktika.repository.DeviceLicenseRepository;
+import ru.MTUCI.rbpo_2024_praktika.service.DeviceLicenseService;
 
 import java.util.List;
 import java.util.Optional;

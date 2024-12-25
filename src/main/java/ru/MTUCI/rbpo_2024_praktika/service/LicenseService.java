@@ -1,7 +1,7 @@
-package ru.mtuci.rbpo_2024_praktika.service;
+package ru.MTUCI.rbpo_2024_praktika.service;
 
-import ru.mtuci.rbpo_2024_praktika.model.License;
-import ru.mtuci.rbpo_2024_praktika.model.User;
+import ru.MTUCI.rbpo_2024_praktika.model.License;
+import ru.MTUCI.rbpo_2024_praktika.model.User;
 
 import java.util.List;
 import java.util.Map;

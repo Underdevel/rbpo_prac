@@ -1,4 +1,4 @@
-package ru.mtuci.rbpo_2024_praktika.controller.dto;
+package ru.MTUCI.rbpo_2024_praktika.controller.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

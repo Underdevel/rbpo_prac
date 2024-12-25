@@ -1,11 +1,11 @@
-package ru.mtuci.rbpo_2024_praktika.controller;
+package ru.MTUCI.rbpo_2024_praktika.controller;
 
-import ru.mtuci.rbpo_2024_praktika.configuration.JwtTokenProvider;
-import ru.mtuci.rbpo_2024_praktika.controller.dto.LoginRequest;
-import ru.mtuci.rbpo_2024_praktika.controller.dto.LoginResponse;
-import ru.mtuci.rbpo_2024_praktika.controller.dto.RegRequest;
-import ru.mtuci.rbpo_2024_praktika.model.ApplicationRole;
-import ru.mtuci.rbpo_2024_praktika.service.UserService;
+import ru.MTUCI.rbpo_2024_praktika.configuration.JwtTokenProvider;
+import ru.MTUCI.rbpo_2024_praktika.controller.dto.LoginRequest;
+import ru.MTUCI.rbpo_2024_praktika.controller.dto.LoginResponse;
+import ru.MTUCI.rbpo_2024_praktika.controller.dto.RegRequest;
+import ru.MTUCI.rbpo_2024_praktika.model.ApplicationRole;
+import ru.MTUCI.rbpo_2024_praktika.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

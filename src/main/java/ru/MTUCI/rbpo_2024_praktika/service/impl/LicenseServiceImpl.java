@@ -1,13 +1,11 @@
-package ru.mtuci.rbpo_2024_praktika.service.impl;
+package ru.MTUCI.rbpo_2024_praktika.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mtuc.rbpo_2024_praktika.model.*;
-import ru.mtuc.rbpo_2024_praktika.repository.*;
-import ru.mtuci.rbpo_2024_praktika.model.*;
-import ru.mtuci.rbpo_2024_praktika.repository.*;
-import ru.mtuci.rbpo_2024_praktika.service.LicenseService;
+import ru.MTUCI.rbpo_2024_praktika.model.*;
+import ru.MTUCI.rbpo_2024_praktika.repository.*;
+import ru.MTUCI.rbpo_2024_praktika.service.LicenseService;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

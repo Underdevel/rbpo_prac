@@ -1,13 +1,13 @@
-package ru.mtuci.rbpo_2024_praktika.service.impl;
+package ru.MTUCI.rbpo_2024_praktika.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.mtuci.rbpo_2024_praktika.model.ApplicationRole;
-import ru.mtuci.rbpo_2024_praktika.model.User;
-import ru.mtuci.rbpo_2024_praktika.repository.DeviceRepository;
-import ru.mtuci.rbpo_2024_praktika.repository.UserRepository;
-import ru.mtuci.rbpo_2024_praktika.service.UserService;
+import ru.MTUCI.rbpo_2024_praktika.model.ApplicationRole;
+import ru.MTUCI.rbpo_2024_praktika.model.User;
+import ru.MTUCI.rbpo_2024_praktika.repository.DeviceRepository;
+import ru.MTUCI.rbpo_2024_praktika.repository.UserRepository;
+import ru.MTUCI.rbpo_2024_praktika.service.UserService;
 
 import java.util.Optional;
 

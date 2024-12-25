@@ -1,4 +1,4 @@
-package ru.mtuci.rbpo_2024_praktika.configuration;
+package ru.MTUCI.rbpo_2024_praktika.configuration;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,4 +1,4 @@
-package ru.mtuci.rbpo_2024_praktika;
+package ru.MTUCI.rbpo_2024_praktika;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
