@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.util.Date;
 
+//TODO: 1. В проекте отсутствует алгоритм генерации цифровой подписи для тикета
+//TODO: 2. Класс не используется в проекте вообще
+
 @Getter
 @Setter
 @AllArgsConstructor

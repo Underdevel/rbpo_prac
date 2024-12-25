@@ -15,6 +15,20 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+//TODO: 1. validateRenewal - лучше проверить пользователя у лицензии, иначе продлить её может кто угодно
+//TODO: 2. generateRenewalTicket - это не создание тикета, смотрите задание. Нужно вернуть подписанный объект
+//TODO: 3. generateTicket - см. TODO 2
+//TODO: 4. Map<String, Object> - почему нельзя использовать DTO?
+//TODO: 5. registerOrUpdateDevice - метод не соответствует имени. И устройства должны иметь уникальный mac-адрес
+//TODO: 6. activateLicense - нужно проверять истекла ли лицензия и принадлежит ли она тому же пользователю, при повторной активации
+//TODO: 7. activateLicense - не устанавливается дата окончания и пользователь при первой активации
+//TODO: 8. activateLicense - должно проверяться максимальное число устройств лицензии, и активироваться, если есть доступное место
+//TODO: 9. getLicenseInfo и activateLicense - отсутствует генерация тикета
+//TODO: 10. createLicense - нельзя ставить максимальное число устройств равным 0
+//TODO: 11. createLicense - дату окончания устанавливать при первой активации
+//TODO: 12. activateLicense - не проверяется, что на устройстве уже активирована эта лицензия
+//TODO: 13. В классе намешана логика, разделить её по сервисам в зависимости от сущности, с которой она работает
+
 @Service
 @RequiredArgsConstructor
 public class LicenseServiceImpl implements LicenseService {
