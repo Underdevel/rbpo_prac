@@ -9,6 +9,10 @@ import ru.MTUCI.rbpo_2024_praktika.service.LicenseHistoryService;
 import java.util.List;
 import java.util.Optional;
 
+//TODO: 1. updateLicenseHistory - не нужно изменять историю никогда
+//TODO: 2. deleteLicenseHistoryById - удалять тоже не нужно
+//TODO: 3. А вот возможность получить историю на клиенте или админу точно нужно
+
 @Service
 @RequiredArgsConstructor
 public class LicenseHistoryServiceImpl implements LicenseHistoryService {

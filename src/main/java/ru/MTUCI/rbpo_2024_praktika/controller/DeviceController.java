@@ -15,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 
+//TODO: 1. внешние сервисы не могут присылать вам сущности из вашей Бд
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/device")

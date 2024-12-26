@@ -10,6 +10,9 @@ import ru.MTUCI.rbpo_2024_praktika.service.DeviceService;
 import java.util.List;
 import java.util.Optional;
 
+//TODO: 1. createDevice - вы каждый раз сохраняете новое устройство, даже если такое уже есть?
+//TODO: 2. updateDevice - откуда вы получаете сущность для метода?
+
 @Service
 @RequiredArgsConstructor
 public class DeviceServiceImpl implements DeviceService {
