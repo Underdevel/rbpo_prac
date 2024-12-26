@@ -64,7 +64,7 @@ public class LicenseController {
     @GetMapping("/read")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllLicenses() {
-        return ResponseEntity.ok(licenseService.getAllLicenses());
+        return ResponseEntity.ok(licenseService.findAllLicenses());
     }
 
     @GetMapping("/read/{id}")

@@ -21,7 +21,7 @@ public class LicenseTypeServiceImpl implements LicenseTypeService {
     }
 
     @Override
-    public List<LicenseType> getAllLicenseTypes() {
+    public List<LicenseType> findAllLicenseTypes() {
         return licenseTypeRepository.findAll();
     }
 

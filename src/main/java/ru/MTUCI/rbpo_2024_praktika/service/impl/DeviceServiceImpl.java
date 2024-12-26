@@ -22,22 +22,36 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public List<Device> getAllDevices() {
+    public List<Device> findAllDevices() {
         return deviceRepository.findAll();
     }
 
     @Override
     public Device createDevice(Device device, User user) {
+
+        if (device.getId() != null && deviceRepository.existsById(device.getId())) {
+            throw new IllegalStateException("Device with this id already exists: " + device.getId());
+        }
+        if (deviceRepository.existsByMacAddress(device.getMacAddress())){
+            throw new IllegalStateException("Device with this mac address already exists: " + device.getMacAddress());
+        }
+
         device.setUser(user);
         return deviceRepository.save(device);
     }
 
-    @Override
-    public Device updateDevice(Device device) {
-        if (!deviceRepository.existsById(device.getId())){
-            throw new IllegalStateException("Device not found: " + device.getId());
+    public Device updateDevice(Device device, User user) {
+        Device existingDevice = deviceRepository.findById(device.getId()).orElseThrow(() -> new IllegalStateException("Device not found: " + device.getId()));
+
+        if (!existingDevice.getUser().getId().equals(user.getId())) {
+            throw new IllegalStateException("You are not the owner of this device: " + device.getId());
         }
-        return deviceRepository.save(device);
+
+        existingDevice.setMacAddress(device.getMacAddress());
+        existingDevice.setName(device.getName());
+
+
+        return deviceRepository.save(existingDevice);
     }
 
     @Override

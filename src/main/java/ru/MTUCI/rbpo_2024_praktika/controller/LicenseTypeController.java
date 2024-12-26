@@ -19,7 +19,7 @@ public class LicenseTypeController {
 
     @GetMapping("/read")
     public ResponseEntity<List<LicenseType>> getAllLicenseTypes() {
-        return ResponseEntity.ok(licenseTypeService.getAllLicenseTypes());
+        return ResponseEntity.ok(licenseTypeService.findAllLicenseTypes());
     }
 
     @GetMapping("/read/{id}")

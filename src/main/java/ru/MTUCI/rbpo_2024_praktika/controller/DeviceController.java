@@ -2,6 +2,7 @@ package ru.MTUCI.rbpo_2024_praktika.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.MTUCI.rbpo_2024_praktika.controller.dto.DeviceRequest;
 import ru.MTUCI.rbpo_2024_praktika.model.Device;
 import ru.MTUCI.rbpo_2024_praktika.model.User;
 import ru.MTUCI.rbpo_2024_praktika.service.DeviceService;
@@ -25,7 +26,7 @@ public class DeviceController {
     @GetMapping("/read")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Device>> getAllDevices() {
-        return ResponseEntity.ok(deviceService.getAllDevices());
+        return ResponseEntity.ok(deviceService.findAllDevices());
     }
 
     @GetMapping("/read/{id}")
@@ -37,21 +38,21 @@ public class DeviceController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Device> createDevice(@RequestBody Device device) {
+    public ResponseEntity<Device> createDevice(@RequestBody DeviceRequest DeviceRequest) {
         User user = getAuthenticatedUser();
+        Device device = convertToEntity(DeviceRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(deviceService.createDevice(device, user));
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateDevice(@PathVariable Long id, @RequestBody Device device) {
-        if (!deviceService.findDeviceById(id).isPresent()){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Device> updateDevice(@PathVariable Long id, @RequestBody DeviceRequest DeviceRequest) {
+        User user = getAuthenticatedUser();
+        Device device = convertToEntity(DeviceRequest);
         device.setId(id);
-        return ResponseEntity.ok(deviceService.updateDevice(device));
+        return ResponseEntity.ok(deviceService.updateDevice(device, user));
     }
+
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -70,5 +71,11 @@ public class DeviceController {
             return userService.findUserByEmail(username).orElseThrow(() -> new IllegalArgumentException("User not found"));
         }
         return null;
+    }
+    private Device convertToEntity(DeviceRequest DeviceRequest) {
+        Device device = new Device();
+        device.setMacAddress(DeviceRequest.getMacAddress());
+        device.setName(DeviceRequest.getName());
+        return device;
     }
 }

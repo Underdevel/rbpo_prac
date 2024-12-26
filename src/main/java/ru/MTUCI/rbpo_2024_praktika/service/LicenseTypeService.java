@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LicenseTypeService {
-    List<LicenseType> getAllLicenseTypes();
+    List<LicenseType> findAllLicenseTypes();
     Optional<LicenseType> findLicenseTypeById(Long id);
 
     LicenseType createLicenseType(LicenseType licenseType);

@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DeviceLicenseService {
-    List<DeviceLicense> getAllDeviceLicenses();
-    List<DeviceLicense> getAllDeviceLicensesByLicenseId(Long licenseId);
-    List<DeviceLicense> getAllDeviceLicensesByDeviceId(Long deviceId);
+    List<DeviceLicense> findAllDeviceLicenses();
+    List<DeviceLicense> findAllDeviceLicensesByLicenseId(Long licenseId);
+    List<DeviceLicense> findAllDeviceLicensesByDeviceId(Long deviceId);
     Optional<DeviceLicense> findDeviceLicenseById(Long id);
 
     DeviceLicense createDeviceLicense(DeviceLicense deviceLicense);

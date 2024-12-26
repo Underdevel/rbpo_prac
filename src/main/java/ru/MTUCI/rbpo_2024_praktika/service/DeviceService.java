@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DeviceService {
-    List<Device> getAllDevices();
+    List<Device> findAllDevices();
     Optional<Device> findDeviceById(Long id);
     Optional<Device> findDeviceByMacAddress(String macAddress);
 
     Device createDevice(Device device, User user);
-    Device updateDevice(Device device);
+    Device updateDevice(Device device, User user);
 
     void deleteDeviceById(Long id);
 }

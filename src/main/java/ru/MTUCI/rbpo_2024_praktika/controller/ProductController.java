@@ -19,7 +19,7 @@ public class ProductController {
 
     @GetMapping("/read")
     public ResponseEntity<List<Product>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+        return ResponseEntity.ok(productService.findAllProducts());
     }
 
     @GetMapping("/read/{id}")

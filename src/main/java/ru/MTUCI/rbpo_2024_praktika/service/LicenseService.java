@@ -9,9 +9,9 @@ import java.util.Map;
 public interface LicenseService {
     License createLicense(Long productId, Long ownerId, Long licenseTypeId, Map<String, Object> params);
     License activateLicense(String activationCode, Map<String, Object> params, User user);
-    String getLicenseInfo(Map<String, Object> deviceInfo, User user);
+    String findLicenseInfo(Map<String, Object> deviceInfo, User user);
     String renewLicense(String licenseCode, User user);
-    List<License> getAllLicenses();
+    List<License> findAllLicenses();
     List<License> findByOwnerId(Long id);
     List<License> findByProductId(Long id);
     License findLicenseById(Long id);

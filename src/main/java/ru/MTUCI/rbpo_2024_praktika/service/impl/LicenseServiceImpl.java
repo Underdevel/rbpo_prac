@@ -94,7 +94,7 @@ public class LicenseServiceImpl implements LicenseService {
 
 
     @Override
-    public String getLicenseInfo(Map<String, Object> deviceInfo, User user) {
+    public String findLicenseInfo(Map<String, Object> deviceInfo, User user) {
         Device device = findDeviceByInfo(deviceInfo, user);
 
         if (device == null) {
@@ -233,7 +233,7 @@ public class LicenseServiceImpl implements LicenseService {
 
 
     @Override
-    public List<License> getAllLicenses() {
+    public List<License> findAllLicenses() {
         return licenseRepository.findAll();
     }
 

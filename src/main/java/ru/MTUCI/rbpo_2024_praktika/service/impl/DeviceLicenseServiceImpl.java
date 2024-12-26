@@ -21,7 +21,7 @@ public class DeviceLicenseServiceImpl implements DeviceLicenseService {
     }
 
     @Override
-    public List<DeviceLicense> getAllDeviceLicenses() {
+    public List<DeviceLicense> findAllDeviceLicenses() {
         return deviceLicenseRepository.findAll();
     }
 
@@ -48,12 +48,12 @@ public class DeviceLicenseServiceImpl implements DeviceLicenseService {
 
 
     @Override
-    public List<DeviceLicense> getAllDeviceLicensesByLicenseId(Long licenseId) {
+    public List<DeviceLicense> findAllDeviceLicensesByLicenseId(Long licenseId) {
         return deviceLicenseRepository.findAllByLicenseId(licenseId);
     }
 
     @Override
-    public List<DeviceLicense> getAllDeviceLicensesByDeviceId(Long deviceId) {
+    public List<DeviceLicense> findAllDeviceLicensesByDeviceId(Long deviceId) {
         return deviceLicenseRepository.findByDeviceId(deviceId);
     }
 }

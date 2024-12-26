@@ -21,7 +21,7 @@ public class LicenseHistoryServiceImpl implements LicenseHistoryService {
     }
 
     @Override
-    public List<LicenseHistory> getAllLicenseHistories() {
+    public List<LicenseHistory> findAllLicenseHistories() {
         return licenseHistoryRepository.findAll();
     }
 
@@ -30,7 +30,7 @@ public class LicenseHistoryServiceImpl implements LicenseHistoryService {
         return licenseHistoryRepository.save(licenseHistory);
     }
 
-    @Override
+    /*@Override
     public LicenseHistory updateLicenseHistory(LicenseHistory licenseHistory) {
         if (!licenseHistoryRepository.existsById(licenseHistory.getId())){
             throw new IllegalStateException("License history not found: " + licenseHistory.getId());
@@ -44,15 +44,15 @@ public class LicenseHistoryServiceImpl implements LicenseHistoryService {
             throw new IllegalStateException("License history not found: " + id);
         }
         licenseHistoryRepository.deleteById(id);
-    }
+    }*/
 
     @Override
-    public List<LicenseHistory> getAllLicenseHistoriesByLicenseId(Long licenseId) {
+    public List<LicenseHistory> findAllLicenseHistoriesByLicenseId(Long licenseId) {
         return licenseHistoryRepository.findAllByLicenseId(licenseId);
     }
 
     @Override
-    public List<LicenseHistory> getAllLicenseHistoriesByUserId(Long userId) {
+    public List<LicenseHistory> findAllLicenseHistoriesByUserId(Long userId) {
         return licenseHistoryRepository.findAllByUserId(userId);
     }
 }

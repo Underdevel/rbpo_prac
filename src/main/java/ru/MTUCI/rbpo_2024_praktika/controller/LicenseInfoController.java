@@ -25,7 +25,7 @@ public class LicenseInfoController {
         User user = getAuthenticatedUser();
 
         try {
-            return ResponseEntity.ok(licenseService.getLicenseInfo(deviceInfo, userService.findUserByLogin(user.getLogin()).orElse(null)));
+            return ResponseEntity.ok(licenseService.findLicenseInfo(deviceInfo, userService.findUserByLogin(user.getLogin()).orElse(null)));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
