@@ -81,13 +81,15 @@ public class DeviceServiceImpl implements DeviceService {
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Device Name can`t be empty");
         }
-
-        Device device = deviceRepository.findDeviceByMacAddress(mac);
-
-        device.setMacAddress(mac);
-        device.setName(name);
-        device.setUser(user);
-
+        Device device = new Device();
+        if(deviceRepository.existsByMacAddress((mac))){
+         device = deviceRepository.findDeviceByMacAddress(mac);
+        } else {
+             device = new Device();
+            device.setMacAddress(mac);
+            device.setName(name);
+            device.setUser(user);
+        }
         return deviceRepository.save(device);
     }
 

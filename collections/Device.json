@@ -128,33 +128,7 @@
 			"response": []
 		},
 		{
-			"name": "Associate Device",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/device/associate?deviceId=1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"device",
-						"associate"
-					],
-					"query": [
-						{
-							"key": "deviceId",
-							"value": "1"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "login",
+			"name": "Login",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -179,6 +153,24 @@
 						"login"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"admin@test.com\",\r\n  \"login\": \"admin\",\r\n  \"password\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/auth/reg"
 			},
 			"response": []
 		}

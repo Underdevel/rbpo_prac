@@ -127,30 +127,22 @@
 		},
 		{
 			"name": "Get License Info",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"mac\": \"some-mac\",\n   \"name\": \"some-name\"\n}",
+					"raw": "{\r\n  \"mac\": \"some-mac\",\r\n   \"name\": \"some-name\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8080/license/info",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"license",
-						"info"
-					]
-				}
+				"url": "http://localhost:8080/license/info"
 			},
 			"response": []
 		},
@@ -245,7 +237,7 @@
 			"response": []
 		},
 		{
-			"name": "login",
+			"name": "Login",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -270,6 +262,24 @@
 						"login"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"admin@test.com\",\r\n  \"login\": \"admin\",\r\n  \"password\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/auth/reg"
 			},
 			"response": []
 		}

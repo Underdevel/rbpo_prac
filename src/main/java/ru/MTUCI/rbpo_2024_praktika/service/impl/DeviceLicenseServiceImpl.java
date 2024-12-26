@@ -8,6 +8,7 @@ import ru.MTUCI.rbpo_2024_praktika.model.License;
 import ru.MTUCI.rbpo_2024_praktika.repository.DeviceLicenseRepository;
 import ru.MTUCI.rbpo_2024_praktika.service.DeviceLicenseService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +39,7 @@ public class DeviceLicenseServiceImpl implements DeviceLicenseService {
         DeviceLicense deviceLicense = new DeviceLicense();
         deviceLicense.setLicense(license);
         deviceLicense.setDevice(device);
+        deviceLicense.setActivation_date(new Date());
         return deviceLicenseRepository.save(deviceLicense);
     }
 
