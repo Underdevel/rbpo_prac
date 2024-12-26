@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"devicesCount\": 10,\n   \"description\": \"some-description\",\n   \"someOtherData\": \"some-data\"\n}",
+					"raw": "{\n  \"devicesCount\": 10,\n   \"description\": \"some-description\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -56,7 +56,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"deviceId\": 1\n}",
+					"raw": "{\n  \"mac\": \"some-mac\",\n   \"name\": \"some-name\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -132,7 +132,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"deviceId\": 1\n}",
+					"raw": "{\n  \"mac\": \"some-mac\",\n   \"name\": \"some-name\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -191,36 +191,6 @@
 						"license",
 						"history",
 						"read",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update License",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"blocked\": true\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/license/update/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"license",
-						"update",
 						"1"
 					]
 				}

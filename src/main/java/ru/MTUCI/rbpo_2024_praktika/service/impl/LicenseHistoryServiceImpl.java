@@ -2,10 +2,15 @@ package ru.MTUCI.rbpo_2024_praktika.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.MTUCI.rbpo_2024_praktika.model.License;
 import ru.MTUCI.rbpo_2024_praktika.model.LicenseHistory;
+import ru.MTUCI.rbpo_2024_praktika.model.User;
 import ru.MTUCI.rbpo_2024_praktika.repository.LicenseHistoryRepository;
 import ru.MTUCI.rbpo_2024_praktika.service.LicenseHistoryService;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +35,15 @@ public class LicenseHistoryServiceImpl implements LicenseHistoryService {
     }
 
     @Override
-    public LicenseHistory createLicenseHistory(LicenseHistory licenseHistory) {
-        return licenseHistoryRepository.save(licenseHistory);
+    public void createLicenseHistory(License license, User user, String action, String description) {
+            LicenseHistory licenseHistory = new LicenseHistory();
+            licenseHistory.setLicense(license);
+            licenseHistory.setDescription(description);
+            licenseHistory.setStatus(action);
+            licenseHistory.setUser(user);
+            licenseHistory.setChangeDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            licenseHistoryRepository.save(licenseHistory);
+
     }
 
     /*@Override

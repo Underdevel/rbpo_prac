@@ -74,6 +74,7 @@ public class DeviceController {
         }
         return null;
     }
+
     private Device convertToEntity(DeviceRequest DeviceRequest) {
         Device device = new Device();
         device.setMacAddress(DeviceRequest.getMacAddress());

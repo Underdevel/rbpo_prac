@@ -56,7 +56,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"name\": \"New License Type\",\n  \"defaultDuration\": \"3600000\",\n  \"description\": \"License type description\"\n}",
+					"raw": "{\n  \"name\": \"New License Type\",\n  \"defaultDuration\": \"365\",\n  \"description\": \"License type description\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -86,7 +86,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"name\": \"Updated License Type\",\n  \"defaultDuration\": \"3600000\",\n  \"description\": \"Updated description\"\n}",
+					"raw": "{\n  \"name\": \"Updated License Type\",\n  \"defaultDuration\": \"730\",\n  \"description\": \"Updated description\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

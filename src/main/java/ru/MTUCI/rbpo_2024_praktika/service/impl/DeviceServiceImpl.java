@@ -2,6 +2,7 @@ package ru.MTUCI.rbpo_2024_praktika.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.MTUCI.rbpo_2024_praktika.controller.dto.LicenseActivationRequest;
 import ru.MTUCI.rbpo_2024_praktika.model.Device;
 import ru.MTUCI.rbpo_2024_praktika.model.User;
 import ru.MTUCI.rbpo_2024_praktika.repository.DeviceRepository;
@@ -66,7 +67,32 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Optional<Device> findDeviceByMacAddress(String macAddress) {
+    public Device findDeviceByMacAddress(String macAddress) {
         return deviceRepository.findDeviceByMacAddress(macAddress);
+    }
+
+    public Device registerOrUpdateDevice(LicenseActivationRequest licenseActivationRequest, User user) {
+        String mac = licenseActivationRequest.getMac();
+        if (mac.isEmpty()) {
+            throw new IllegalArgumentException("Mac can`t be empty");
+        }
+
+        String name = licenseActivationRequest.getName();
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("Device Name can`t be empty");
+        }
+
+        Device device = deviceRepository.findDeviceByMacAddress(mac);
+
+        device.setMacAddress(mac);
+        device.setName(name);
+        device.setUser(user);
+
+        return deviceRepository.save(device);
+    }
+
+    public Device findDeviceByInfo(String mac, String name, User user) {
+        Device device = deviceRepository.findDeviceByMacAddress(mac);
+        return device;
     }
 }

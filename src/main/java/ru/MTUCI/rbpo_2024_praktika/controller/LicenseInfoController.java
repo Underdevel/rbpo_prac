@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.MTUCI.rbpo_2024_praktika.model.User;
 import ru.MTUCI.rbpo_2024_praktika.service.LicenseService;
 import ru.MTUCI.rbpo_2024_praktika.service.UserService;
-
-import java.util.Map;
+import ru.MTUCI.rbpo_2024_praktika.controller.dto.LicenseInfoRequest;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,11 +20,11 @@ public class LicenseInfoController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<?> getLicenseInfo(@RequestBody Map<String, Object> deviceInfo, Authentication authentication) {
+    public ResponseEntity<?> getLicenseInfo(@RequestBody LicenseInfoRequest licenseInfoRequest, Authentication authentication) {
         User user = getAuthenticatedUser();
 
         try {
-            return ResponseEntity.ok(licenseService.findLicenseInfo(deviceInfo, userService.findUserByLogin(user.getLogin()).orElse(null)));
+            return ResponseEntity.ok(licenseService.getLicenseInfo(licenseInfoRequest, userService.findUserByLogin(user.getLogin()).orElse(null)));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

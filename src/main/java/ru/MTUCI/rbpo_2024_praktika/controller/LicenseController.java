@@ -7,12 +7,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import ru.MTUCI.rbpo_2024_praktika.controller.dto.LicenseActivationRequest;
+import ru.MTUCI.rbpo_2024_praktika.controller.dto.LicenseCreationRequest;
 import ru.MTUCI.rbpo_2024_praktika.model.License;
 import ru.MTUCI.rbpo_2024_praktika.model.User;
 import ru.MTUCI.rbpo_2024_praktika.service.LicenseService;
 import ru.MTUCI.rbpo_2024_praktika.service.UserService;
-
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +22,32 @@ public class LicenseController {
     private final LicenseService licenseService;
     private final UserService userService;
 
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createLicenseWithParams(@RequestParam(name = "productId") Long productId,
+                                                     @RequestParam(name = "ownerId") Long ownerId,
+                                                     @RequestParam(name = "licenseTypeId") Long licenseTypeId,
+                                                     @RequestBody LicenseCreationRequest licenseCreationRequest) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(licenseService.createLicense(productId, ownerId, licenseTypeId, licenseCreationRequest));
+        } catch (IllegalArgumentException ex) {
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ex.getMessage());
+        }
+    }
+
+    @PostMapping("/activate")
+    public ResponseEntity<?> activateLicense(@RequestParam(name = "activationCode") String activationCode,
+                                             @RequestBody LicenseActivationRequest licenseActivationRequest,
+                                             Authentication authentication) {
+        User user = getAuthenticatedUser();
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(licenseService.activateLicense(activationCode,licenseActivationRequest, userService.findUserByLogin(user.getLogin()).orElse(null)));
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+    }
 
     @PostMapping("/renew")
     public ResponseEntity<?> renewLicense(@RequestParam String licenseCode, Authentication authentication){
@@ -34,33 +60,6 @@ public class LicenseController {
         }
     }
 
-    @PostMapping("/activate")
-    public ResponseEntity<?> activateLicense(@RequestParam(name = "activationCode") String activationCode,
-                                             @RequestBody Map<String,Object> params, Authentication authentication) {
-        User user = getAuthenticatedUser();
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(licenseService.activateLicense(activationCode, params, userService.findUserByLogin(user.getLogin()).orElse(null)));
-        }catch (IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(e.getMessage());
-        }
-    }
-
-    @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createLicenseWithParams(@RequestParam(name = "productId") Long productId,
-                                                     @RequestParam(name = "ownerId") Long ownerId,
-                                                     @RequestParam(name = "licenseTypeId") Long licenseTypeId,
-                                                     @RequestBody Map<String, Object> params) {
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(licenseService.createLicense(productId, ownerId, licenseTypeId, params));
-        } catch (IllegalArgumentException ex) {
-            return  ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ex.getMessage());
-        }
-    }
-
-
     @GetMapping("/read")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllLicenses() {
@@ -71,12 +70,6 @@ public class LicenseController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getLicenseById(@PathVariable Long id) {
         return ResponseEntity.ok(licenseService.findLicenseById(id));
-    }
-
-    @PutMapping("/update/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateLicense(@PathVariable Long id, @RequestBody License license) {
-        return ResponseEntity.ok(licenseService.updateLicense(license));
     }
 
     @DeleteMapping("/delete/{id}")

@@ -3,16 +3,16 @@ package ru.MTUCI.rbpo_2024_praktika.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.MTUCI.rbpo_2024_praktika.controller.dto.LicenseActivationRequest;
+import ru.MTUCI.rbpo_2024_praktika.controller.dto.LicenseCreationRequest;
+import ru.MTUCI.rbpo_2024_praktika.controller.dto.LicenseInfoRequest;
 import ru.MTUCI.rbpo_2024_praktika.model.*;
 import ru.MTUCI.rbpo_2024_praktika.repository.*;
-import ru.MTUCI.rbpo_2024_praktika.service.LicenseService;
+import ru.MTUCI.rbpo_2024_praktika.service.*;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 //TODO: 1. validateRenewal - лучше проверить пользователя у лицензии, иначе продлить её может кто угодно
@@ -37,33 +37,109 @@ public class LicenseServiceImpl implements LicenseService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final LicenseTypeRepository licenseTypeRepository;
-    private final LicenseHistoryRepository licenseHistoryRepository;
     private final DeviceLicenseRepository deviceLicenseRepository;
-    private final DeviceRepository deviceRepository;
-
+    private final DeviceService deviceService;
+    private final DeviceLicenseService deviceLicenseService;
+    private final TicketService ticketService;
+    private final LicenseHistoryService licenseHistoryService;
 
     @Override
     @Transactional
-    public String renewLicense(String licenseCode, User user) {
-        License license = licenseRepository.findByCode(licenseCode).orElse(null);
-        if (license == null) {
-            throw new IllegalArgumentException("Invalid license code: " + licenseCode);
+    public License createLicense(Long productId, Long ownerId, Long licenseTypeId, LicenseCreationRequest licenseCreationRequest) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + productId));
+
+        User owner = userRepository.findById(ownerId).orElseThrow(() -> new IllegalArgumentException("User (owner) not found with id: " + ownerId));
+
+        LicenseType licenseType = licenseTypeRepository.findById(licenseTypeId).orElseThrow(() -> new IllegalArgumentException("License type not found with id: " + licenseTypeId));
+
+        License license = new License();
+
+        license.setCode(UUID.randomUUID().toString());
+
+        license.setProduct(product);
+        license.setOwner(owner);
+        license.setLicenseType(licenseType);
+
+        if (licenseCreationRequest.getDevicesCount() <= 0) {
+            throw new IllegalArgumentException("DevicesCount must be greater than 0");
         }
+        license.setDevicesCount(licenseCreationRequest.getDevicesCount());
+        license.setDescription(licenseCreationRequest.getDescription());
+        license.setDuration(licenseType.getDefaultDuration());
+        license.setBlocked(false);
+
+        License savedLicense = licenseRepository.save(license);
+
+        licenseHistoryService.createLicenseHistory(savedLicense, owner, "Created", "New License Created");
+
+        return savedLicense;
+    }
+
+    @Override
+    @Transactional
+    public Ticket activateLicense(String activationCode, LicenseActivationRequest licenseActivationRequest, User user) {
+
+        Device device = deviceService.registerOrUpdateDevice(licenseActivationRequest, user);
+
+        License license = licenseRepository.findByCode(activationCode).orElse(null);
+        if (license == null) {
+            throw new IllegalArgumentException("License not found with code: " + activationCode);
+        }
+
+        validateActivation(license, device, user);
+
+        deviceLicenseService.createDeviceLicense(license, device);
+
+        if (license.getFirst_activation_date() == null) {
+            LocalDate endDate = LocalDate.now().plusDays(license.getDuration());
+            license.setEnding_date(Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            license.setFirst_activation_date(new Date());
+        }
+
+        license.setUser(user);
+
+        licenseHistoryService.createLicenseHistory(license, user, "Activated", "License Activated for user with id " + user.getId() + " and device with id " + device.getId());
+
+        Ticket ticket = ticketService.generateTicket(license, device);
+
+        return ticket;
+    }
+
+    private void validateActivation(License license, Device device, User user) {
+        if(license.getBlocked()){
+            throw new IllegalArgumentException("License is blocked: " + license.getId());
+        }
+        if (!license.getOwner().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("License does not belong to this user: " + user.getId());
+        }
+        if (license.getEnding_date() != null && license.getEnding_date().before(new Date())) {
+            throw new IllegalArgumentException("License has expired: " + license.getId());
+        }
+        if(license.getDevicesCount() > 0 && deviceLicenseRepository.countByLicenseId(license.getId()) >= license.getDevicesCount() ) {
+            throw new IllegalArgumentException("License limit of devices exceeded: " + license.getId());
+        }
+    }
+
+    @Override
+    @Transactional
+    public Ticket renewLicense(String licenseCode, User user) {
+        License license = licenseRepository.findByCode(licenseCode).orElseThrow(() ->
+                new IllegalArgumentException("License not found with code: " + licenseCode));
+
         validateRenewal(license, user);
 
-        LocalDate expirationDate = LocalDate.now().plusDays(license.getDuration());
-        license.setEnding_date(Date.from(expirationDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        int duration = license.getDuration();
+        LocalDate endingDate = LocalDate.now().plusDays(duration);
+        license.setEnding_date(Date.from(endingDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
         licenseRepository.save(license);
 
-        recordLicenseChange(license, user, "Renewed", "License renewed");
+        Ticket ticket = ticketService.generateRenewalTicket(license);
 
-        return generateRenewalTicket(license);
+        licenseHistoryService.createLicenseHistory(license, user, "Renewed", "License renewed");
+
+        return ticket;
     }
-
-    private String generateRenewalTicket(License license) {
-        return "License renewed, new ending date is: " + license.getEnding_date();
-    }
-
 
     private void validateRenewal(License license, User user) {
         if (license.getBlocked() != null && license.getBlocked()) {
@@ -77,53 +153,20 @@ public class LicenseServiceImpl implements LicenseService {
         }
     }
 
-
     @Override
-    @Transactional
-    public License activateLicense(String activationCode, Map<String, Object> params, User user) {
-        License license = licenseRepository.findByCode(activationCode).orElse(null);
-        if (license == null) {
-            throw new IllegalArgumentException("License not found with code: " + activationCode);
-        }
-
-        Device device = registerOrUpdateDevice(params, user);
-
-        validateActivation(license, device, user);
-
-        createDeviceLicense(license, device);
-
-        if (license.getFirst_activation_date() == null) {
-            license.setFirst_activation_date(new Date());
-            licenseRepository.save(license);
-        }
-
-        license.setUser(user);
-
-        recordLicenseChange(license, user, "Activated", "License Activated for user with id " + user.getId() + " and device with id " + device.getId());
-
-        String ticket = generateTicket(license, device);
-
-        return license;
-    }
-
-
-    @Override
-    public String findLicenseInfo(Map<String, Object> deviceInfo, User user) {
-        Device device = findDeviceByInfo(deviceInfo, user);
-
+    public List<Ticket> getLicenseInfo(LicenseInfoRequest licenseInfoRequest, User user) {
+        Device device = deviceService.findDeviceByInfo(licenseInfoRequest.getMac(),licenseInfoRequest.getName(), user);
         if (device == null) {
             throw new IllegalArgumentException("Device not found");
         }
 
         List<License> licenses = getActiveLicensesForDevice(device, user);
+        List<Ticket> tickets = new ArrayList<>();
 
-        return generateTicket(licenses, device);
-    }
-
-    private String generateTicket(List<License> licenses, Device device) {
-        return licenses.stream()
-                .map(license -> "License: " + license.getId() + " Device: " + device.getId())
-                .collect(Collectors.joining(", "));
+        for(License license : licenses){
+            tickets.add(ticketService.generateTicket(license, device));
+        }
+        return tickets;
     }
 
     private List<License> getActiveLicensesForDevice(Device device, User user) {
@@ -131,120 +174,6 @@ public class LicenseServiceImpl implements LicenseService {
                 .map(DeviceLicense::getLicense)
                 .collect(Collectors.toList());
     }
-
-    private Device findDeviceByInfo(Map<String, Object> deviceInfo, User user) {
-        Device device = null;
-        if (deviceInfo.containsKey("deviceId")) {
-            Long deviceId = Long.parseLong(deviceInfo.get("deviceId").toString());
-            device = deviceRepository.findById(deviceId).orElse(null);
-
-        }
-
-        return device;
-    }
-
-
-    private String generateTicket(License license, Device device) {
-        return "Ticket for License: " + license.getId() + " Device: " + device.getId();
-    }
-
-    private void recordLicenseChange(License license, User user, String action, String description) {
-        LicenseHistory licenseHistory = new LicenseHistory();
-        licenseHistory.setLicense(license);
-        licenseHistory.setDescription(description);
-        licenseHistory.setStatus(action);
-        licenseHistory.setUser(user);
-        licenseHistory.setChangeDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        licenseHistoryRepository.save(licenseHistory);
-    }
-
-
-    private void createDeviceLicense(License license, Device device) {
-        if (license.getDevicesCount() != null && license.getDeviceLicenses().size() >= license.getDevicesCount()) {
-            throw new IllegalArgumentException("Device limit reached for license with id " + license.getId());
-        }
-        if (deviceLicenseRepository.findByDeviceIdAndLicenseId(device.getId(), license.getId()).isPresent()) {
-            throw new IllegalArgumentException("Device with id " + device.getId() + " already activated for license with id " + license.getId());
-        }
-        DeviceLicense deviceLicense = new DeviceLicense();
-        deviceLicense.setDevice(device);
-        deviceLicense.setLicense(license);
-        deviceLicense.setActivation_date(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        deviceLicenseRepository.save(deviceLicense);
-    }
-
-    private void validateActivation(License license, Device device, User user) {
-        if (device == null) {
-            throw new IllegalArgumentException("Device not found");
-        }
-
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
-        }
-    }
-
-    private Device registerOrUpdateDevice(Map<String, Object> params, User user) {
-        Device device = null;
-        if (params.containsKey("deviceId")) {
-            Long deviceId = Long.parseLong(params.get("deviceId").toString());
-            device = deviceRepository.findById(deviceId).orElse(null);
-
-        }
-        if (device == null) {
-            throw new IllegalArgumentException("Device id is not passed");
-        }
-
-        return device;
-    }
-
-    @Override
-    @Transactional
-    public License createLicense(Long productId, Long ownerId, Long licenseTypeId, Map<String, Object> params) {
-        Product product = productRepository.findById(productId).orElse(null);
-        if (product == null) {
-            throw new IllegalArgumentException("Product not found with id: " + productId);
-        }
-
-        User owner = userRepository.findById(ownerId).orElse(null);
-        if (owner == null) {
-            throw new IllegalArgumentException("User (owner) not found with id: " + ownerId);
-        }
-
-        LicenseType licenseType = licenseTypeRepository.findById(licenseTypeId).orElse(null);
-        if (licenseType == null) {
-            throw new IllegalArgumentException("License type not found with id: " + licenseTypeId);
-        }
-
-        License license = new License();
-
-        license.setCode(UUID.randomUUID().toString());
-        license.setProduct(product);
-        license.setOwner(owner);
-        license.setLicenseType(licenseType);
-        license.setBlocked(false);
-
-        if (params.containsKey("devicesCount")) {
-            license.setDevicesCount(Integer.parseInt(params.get("devicesCount").toString()));
-        } else {
-            license.setDevicesCount(0);
-        }
-        if (params.containsKey("description")) {
-            license.setDescription(params.get("description").toString());
-        }
-
-        license.setDuration(licenseType.getDefaultDuration());
-        LocalDate creationDate = LocalDate.now();
-        LocalDate expirationDate = creationDate.plusDays(licenseType.getDefaultDuration());
-        license.setEnding_date(Date.from(expirationDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-
-        License savedLicense = licenseRepository.save(license);
-
-        recordLicenseChange(savedLicense, owner, "Created", "License Created");
-
-
-        return savedLicense;
-    }
-
 
     @Override
     public List<License> findAllLicenses() {
@@ -265,11 +194,6 @@ public class LicenseServiceImpl implements LicenseService {
     @Override
     public License findLicenseById(Long id) {
         return licenseRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid license id: " + id));
-    }
-
-    @Override
-    public License updateLicense(License license) {
-        return licenseRepository.save(license);
     }
 
     @Override

@@ -2,7 +2,9 @@ package ru.MTUCI.rbpo_2024_praktika.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.MTUCI.rbpo_2024_praktika.model.Device;
 import ru.MTUCI.rbpo_2024_praktika.model.DeviceLicense;
+import ru.MTUCI.rbpo_2024_praktika.model.License;
 import ru.MTUCI.rbpo_2024_praktika.repository.DeviceLicenseRepository;
 import ru.MTUCI.rbpo_2024_praktika.service.DeviceLicenseService;
 
@@ -26,7 +28,16 @@ public class DeviceLicenseServiceImpl implements DeviceLicenseService {
     }
 
     @Override
-    public DeviceLicense createDeviceLicense(DeviceLicense deviceLicense) {
+    public DeviceLicense createDeviceLicense(License license, Device device) {
+        if (license.getDevicesCount() != null && license.getDeviceLicenses().size() >= license.getDevicesCount()) {
+            throw new IllegalArgumentException("Device limit reached for license with id " + license.getId());
+        }
+        if (deviceLicenseRepository.findByDeviceIdAndLicenseId(device.getId(), license.getId()).isPresent()) {
+            throw new IllegalArgumentException("Device with id " + device.getId() + " already activated for license with id " + license.getId());
+        }
+        DeviceLicense deviceLicense = new DeviceLicense();
+        deviceLicense.setLicense(license);
+        deviceLicense.setDevice(device);
         return deviceLicenseRepository.save(deviceLicense);
     }
 
