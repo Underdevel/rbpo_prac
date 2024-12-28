@@ -94,9 +94,8 @@ public class LicenseServiceImpl implements LicenseService {
             LocalDate endDate = LocalDate.now().plusDays(license.getDuration());
             license.setEnding_date(Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
             license.setFirst_activation_date(new Date());
+            license.setUser(user);
         }
-
-        license.setUser(user);
 
         licenseHistoryService.createLicenseHistory(license, user, "Activated", "License Activated for user with id " + user.getId() + " and device with id " + device.getId());
 
@@ -109,7 +108,7 @@ public class LicenseServiceImpl implements LicenseService {
         if(license.getBlocked()){
             throw new IllegalArgumentException("License is blocked: " + license.getId());
         }
-        if (!license.getOwner().getId().equals(user.getId())) {
+        if (license.getUser() != null && !license.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("License does not belong to this user: " + user.getId());
         }
         if (license.getEnding_date() != null && license.getEnding_date().before(new Date())) {
@@ -129,7 +128,7 @@ public class LicenseServiceImpl implements LicenseService {
         validateRenewal(license, user);
 
         int duration = license.getDuration();
-        LocalDate endingDate = LocalDate.now().plusDays(duration);
+        LocalDate endingDate = license.getEnding_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().plusDays(duration);
         license.setEnding_date(Date.from(endingDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         licenseRepository.save(license);
@@ -148,8 +147,8 @@ public class LicenseServiceImpl implements LicenseService {
         if (license.getEnding_date().before(new Date())) {
             throw new IllegalArgumentException("License has expired");
         }
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
+        if (!license.getOwner().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("License does not belong to this user: " + user.getId());
         }
     }
 
