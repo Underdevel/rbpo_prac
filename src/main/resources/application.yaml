@@ -13,3 +13,11 @@ spring:
 jwt:
   secret: ${JDBC_SECRET}
   expiration: 3600000
+
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    key-store: ${KeyStore}
+    key-store-password: ${KeyStorePass}
+    key-alias: ${KeyAlias}
